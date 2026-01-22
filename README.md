@@ -21,6 +21,7 @@ CodeYard is a game-based learning platform that makes programming fun and engagi
 - **Block Dodger**: Master event handling and collision detection
 
 ### ✅ Java
+- **Complete RPG Game**: A full-featured RPG with combat, inventory, leveling, and more!
 - **Simple Game**: Learn Java basics and Swing GUI programming through a simple game
 
 ### 🔜 Coming Soon
@@ -113,11 +114,39 @@ Once the application is running, open your browser and navigate to:
 
 The application uses Spring Boot's embedded Tomcat server and serves static resources from the `src/main/resources/static/` directory.
 
+## 🎮 Java RPG Game
+
+A **complete, playable RPG game** is included in this project! 
+
+### RPG Game Features:
+- **Player System**: Health, leveling, experience, gold, stats
+- **Combat System**: Turn-based combat with enemies
+- **Item System**: Weapons, armor, potions, gold
+- **Game Map**: Procedurally generated world
+- **Inventory Management**: Collect and use items
+
+### How to Run the RPG:
+```bash
+# From IDE: Run RPGGameLauncher.java
+# Or from command line:
+java -cp target/classes com.codeyard.game.RPGGameLauncher
+```
+
+See `JAVA_RPG_README.md` for complete documentation!
+
+### RPG Game Files:
+- `src/main/java/com/codeyard/game/rpg/Player.java`
+- `src/main/java/com/codeyard/game/rpg/Enemy.java`
+- `src/main/java/com/codeyard/game/rpg/Item.java`
+- `src/main/java/com/codeyard/game/rpg/GameMap.java`
+- `src/main/java/com/codeyard/game/rpg/RPGGame.java`
+- `src/main/java/com/codeyard/game/RPGGameLauncher.java`
+
 ## 📌 Notes
 
 - The application runs on port 8080 by default (configurable in `application.properties`)
 - Static resources (HTML, CSS, JS, images) are served from the `/static/` directory
-- The Java game (`SimpleGame.java`) requires a desktop environment to run as it uses Swing
+- The Java games require a desktop environment to run (console-based RPG and Swing-based SimpleGame)
 - JavaScript games run directly in the browser
 
 ## 🎓 How to Use

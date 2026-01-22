@@ -41,5 +41,10 @@ public class HomeController {
     public String tutorials() {
         return "redirect:/index.html";
     }
+
+    @GetMapping("/java/rpg")
+    public String rpgGame() {
+        return "redirect:/java.html#rpg-game";
+    }
 }
 
