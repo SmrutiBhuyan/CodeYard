@@ -1,0 +1,43 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>CodeYard - JavaScript Game Demo</title>  
+    <link rel="stylesheet" href="game-demo.css">  
+</head>  
+<body>  
+    <header class="header">  
+        <h1>CodeYard - Learn to Code by Building a Game</h1>  
+        <nav class="navbar">  
+            <a href="index.html">Home</a>  
+            <a href="#game-demo">Game Demo</a>  
+            <a href="#learn-js">Learn JavaScript</a>  
+        </nav>  
+    </header>  
+
+    <main class="game-preview">  
+        <!-- Game Demo Section -->  
+        <section id="game-demo" class="preview-section">  
+            <h2>JavaScript Snake Game Demo</h2>  
+            <p>Control the snake using arrow keys. Try to eat the food and grow longer without hitting the walls!</p>  
+            <canvas id="gameCanvas" width="400" height="400"></canvas>  
+            <button class="start" id="startGame">Start Game</button>  
+            <button class="startLearning" id="startLearning">Start Learning</button>  
+        </section>  
+
+        <!-- Learning Section -->  
+        <section id="learn-js" class="learning-section" style="display: none;">  
+            <h2>Learn to Build This Snake Game</h2>  
+            <p id="learning-step"><strong>Step 1:</strong> Write your first JavaScript program.</p>  
+            <textarea id="code-editor" rows="10" cols="50">// Write your JavaScript code here</textarea>  
+            <button id="run-code">Run Code</button>  
+            <p id="output"></p>  
+            <button id="next-step" style="display: none;">Next Step</button>  
+        </section>  
+    </main>  
+
+    <script src="js-game.js"></script>  
+    <script src="learn-game.js"></script>  
+</body>  
+</html>  
