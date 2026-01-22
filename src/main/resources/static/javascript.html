@@ -6,6 +6,7 @@
     <title>Learn JavaScript - CodeYard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="game-levels.css">
+    <link rel="stylesheet" href="ide-editor.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg fixed-top game-nav">
@@ -43,28 +44,57 @@
                 </div>
             </div>
 
-            <!-- Game Canvas Area -->
-            <div class="game-area">
-                <div class="game-view">
-                    <canvas id="gameCanvas" width="600" height="400"></canvas>
-                    <div class="game-controls">
-                        <button id="runCode" class="btn-run">▶ Run Code</button>
-                        <button id="resetLevel" class="btn-reset">↻ Reset</button>
-                        <button id="hintBtn" class="btn-hint">💡 Hint</button>
+            <!-- IDE Editor with Split View -->
+            <div class="split-container">
+                <!-- Left: Code Editor -->
+                <div class="split-left">
+                    <div class="ide-container">
+                        <div class="ide-toolbar">
+                            <div class="ide-toolbar-left">
+                                <span style="color: #cccccc; font-weight: bold;">💻 Code Editor</span>
+                                <span class="ide-status status-ready" id="ideStatus">Ready</span>
+                            </div>
+                            <div class="ide-toolbar-right">
+                                <button id="ideRunBtn" class="ide-button btn-run">
+                                    <span>▶</span> Run (Ctrl+Enter)
+                                </button>
+                                <button id="ideResetBtn" class="ide-button btn-reset">
+                                    <span>↻</span> Reset
+                                </button>
+                                <button id="ideClearBtn" class="ide-button btn-clear">
+                                    <span>🗑</span> Clear
+                                </button>
+                            </div>
+                        </div>
+                        <div class="ide-editor-wrapper">
+                            <div class="ide-editor-content">
+                                <textarea id="ideCodeEditor" placeholder="// Write your JavaScript code here
+// Press Ctrl+Enter or click Run to execute
+// Watch the game canvas update as you code!"></textarea>
+                            </div>
+                        </div>
+                        <div class="ide-output">
+                            <div class="ide-output-header">
+                                <span>Console Output</span>
+                                <span style="font-size: 11px; color: #858585;">Press Ctrl+L to clear</span>
+                            </div>
+                            <div id="ideOutput" class="ide-output-content">
+                                <span style="color: #858585;">Ready to run code...</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Code Editor -->
-                <div class="code-editor-container">
-                    <div class="editor-header">
-                        <span>📝 Your Code</span>
-                        <span class="concept-badge" id="conceptBadge">Variables</span>
-                    </div>
-                    <textarea id="codeEditor" spellcheck="false">// Write your code here
-// Follow the instructions to complete this level</textarea>
-                    <div class="editor-footer">
-                        <button id="checkCode" class="btn-check">✓ Check Solution</button>
-                        <div id="codeStatus" class="code-status"></div>
+                <!-- Right: Game Canvas -->
+                <div class="split-right">
+                    <div class="game-view" style="height: 100%; display: flex; flex-direction: column;">
+                        <div class="game-canvas-container" style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                            <canvas id="gameCanvas" width="600" height="400"></canvas>
+                        </div>
+                        <div class="game-controls" style="padding: 15px; background: rgba(0,0,0,0.3);">
+                            <button id="checkCode" class="btn-check" style="width: 100%;">✓ Check Solution</button>
+                            <div id="codeStatus" class="code-status" style="margin-top: 10px; text-align: center;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -90,7 +120,49 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="ide-editor.js"></script>
     <script src="adventure-game.js"></script>
     <script src="level-system.js"></script>
+    <script>
+        // Integrate IDE with level system
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wait for IDE to initialize
+            setTimeout(() => {
+                if (window.ideEditor && typeof loadLevel === 'function') {
+                    // Override loadLevel to update IDE editor
+                    const originalLoadLevel = loadLevel;
+                    loadLevel = function(index) {
+                        originalLoadLevel(index);
+                        const level = levels[index];
+                        if (window.ideEditor && level) {
+                            window.ideEditor.setCode(level.starterCode);
+                        }
+                    };
+                    
+                    // Override runCode in level-system to use IDE
+                    const originalRunCode = runCode;
+                    runCode = function() {
+                        if (window.ideEditor) {
+                            window.ideEditor.runCode();
+                        } else {
+                            originalRunCode();
+                        }
+                    };
+                    
+                    // Update checkCode to use IDE code
+                    const checkBtn = document.getElementById('checkCode');
+                    if (checkBtn) {
+                        checkBtn.addEventListener('click', () => {
+                            if (window.ideEditor) {
+                                const code = window.ideEditor.getCode();
+                                document.getElementById('codeEditor').value = code;
+                            }
+                            checkSolution();
+                        });
+                    }
+                }
+            }, 500);
+        });
+    </script>
 </body>
 </html>

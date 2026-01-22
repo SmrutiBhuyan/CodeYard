@@ -1,0 +1,300 @@
+/* IDE Editor Styles */
+.ide-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #1e1e1e;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.ide-toolbar {
+    background: #252526;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #3e3e42;
+}
+
+.ide-toolbar-left {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.ide-toolbar-right {
+    display: flex;
+    gap: 10px;
+}
+
+.ide-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-run {
+    background: #0e639c;
+    color: white;
+}
+
+.btn-run:hover {
+    background: #1177bb;
+}
+
+.btn-run:active {
+    background: #0a4d75;
+}
+
+.btn-reset {
+    background: #5a5a5a;
+    color: white;
+}
+
+.btn-reset:hover {
+    background: #6a6a6a;
+}
+
+.btn-clear {
+    background: #a1260d;
+    color: white;
+}
+
+.btn-clear:hover {
+    background: #c02e11;
+}
+
+.ide-editor-wrapper {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+#ideCodeEditor {
+    width: 100%;
+    height: 100%;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    border: none;
+    padding: 20px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+    tab-size: 4;
+    -moz-tab-size: 4;
+}
+
+#ideCodeEditor::placeholder {
+    color: #6a6a6a;
+}
+
+.ide-output {
+    background: #1e1e1e;
+    border-top: 1px solid #3e3e42;
+    padding: 15px;
+    max-height: 200px;
+    overflow-y: auto;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 13px;
+}
+
+.ide-output-header {
+    color: #cccccc;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ide-output-content {
+    color: #4ec9b0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.ide-output-error {
+    color: #f48771;
+}
+
+.ide-output-success {
+    color: #4ec9b0;
+}
+
+.ide-status {
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-ready {
+    background: #0e639c;
+    color: white;
+}
+
+.status-running {
+    background: #f0ad4e;
+    color: white;
+}
+
+.status-success {
+    background: #5cb85c;
+    color: white;
+}
+
+.status-error {
+    background: #d9534f;
+    color: white;
+}
+
+/* Syntax highlighting hints */
+.code-line-numbers {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 50px;
+    background: #252526;
+    color: #858585;
+    padding: 20px 10px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: right;
+    user-select: none;
+    pointer-events: none;
+    border-right: 1px solid #3e3e42;
+}
+
+.ide-editor-content {
+    position: relative;
+    height: 100%;
+}
+
+.ide-editor-textarea {
+    padding-left: 60px;
+}
+
+/* Game Canvas Integration */
+.game-canvas-container {
+    background: #000;
+    border: 2px solid #3e3e42;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.game-canvas-container canvas {
+    border: 1px solid #3e3e42;
+    background: #000;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Split View */
+.split-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    height: 600px;
+}
+
+.split-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.split-right {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .split-container {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+    
+    .split-left, .split-right {
+        height: 500px;
+    }
+}
+
+/* Code Suggestions */
+.code-suggestions {
+    background: #252526;
+    border: 1px solid #3e3e42;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 3px;
+    color: #cccccc;
+    font-size: 13px;
+}
+
+.suggestion-item:hover {
+    background: #2a2d2e;
+    color: #4ec9b0;
+}
+
+/* Auto-complete dropdown */
+.autocomplete-dropdown {
+    position: absolute;
+    background: #252526;
+    border: 1px solid #3e3e42;
+    border-radius: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.autocomplete-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #cccccc;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 13px;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.selected {
+    background: #094771;
+    color: #4ec9b0;
+}
+
+/* Loading indicator */
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #3e3e42;
+    border-top-color: #0e639c;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+

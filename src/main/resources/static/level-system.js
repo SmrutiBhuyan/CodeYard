@@ -261,13 +261,24 @@ function initLevelSystem() {
     loadLevel(0);
     updateProgress();
     
-    // Event listeners
-    document.getElementById('runCode').addEventListener('click', runCode);
-    document.getElementById('checkCode').addEventListener('click', checkSolution);
-    document.getElementById('resetLevel').addEventListener('click', resetLevel);
-    document.getElementById('hintBtn').addEventListener('click', toggleHint);
-    document.getElementById('nextLevel').addEventListener('click', nextLevel);
-    document.getElementById('prevLevel').addEventListener('click', prevLevel);
+    // Event listeners (check if elements exist)
+    const runCodeBtn = document.getElementById('runCode');
+    if (runCodeBtn) runCodeBtn.addEventListener('click', runCode);
+    
+    const checkCodeBtn = document.getElementById('checkCode');
+    if (checkCodeBtn) checkCodeBtn.addEventListener('click', checkSolution);
+    
+    const resetLevelBtn = document.getElementById('resetLevel');
+    if (resetLevelBtn) resetLevelBtn.addEventListener('click', resetLevel);
+    
+    const hintBtn = document.getElementById('hintBtn');
+    if (hintBtn) hintBtn.addEventListener('click', toggleHint);
+    
+    const nextLevelBtn = document.getElementById('nextLevel');
+    if (nextLevelBtn) nextLevelBtn.addEventListener('click', nextLevel);
+    
+    const prevLevelBtn = document.getElementById('prevLevel');
+    if (prevLevelBtn) prevLevelBtn.addEventListener('click', prevLevel);
 }
 
 function renderLevelsList() {
@@ -301,24 +312,51 @@ function loadLevel(index) {
     const level = levels[index];
     
     // Update UI
-    document.getElementById('levelTitle').textContent = level.title;
-    document.getElementById('levelDescription').textContent = level.description;
-    document.getElementById('instructions').innerHTML = level.instructions;
-    document.getElementById('codeEditor').value = level.starterCode;
-    document.getElementById('conceptBadge').textContent = level.concept;
-    document.getElementById('hintText').textContent = level.hint;
+    const levelTitle = document.getElementById('levelTitle');
+    const levelDescription = document.getElementById('levelDescription');
+    const instructions = document.getElementById('instructions');
+    const conceptBadge = document.getElementById('conceptBadge');
+    const hintText = document.getElementById('hintText');
+    
+    if (levelTitle) levelTitle.textContent = level.title;
+    if (levelDescription) levelDescription.textContent = level.description;
+    if (instructions) instructions.innerHTML = level.instructions;
+    if (conceptBadge) conceptBadge.textContent = level.concept;
+    if (hintText) hintText.textContent = level.hint;
+    
+    // Update code editor (both IDE and textarea)
+    if (window.ideEditor) {
+        window.ideEditor.setCode(level.starterCode);
+    }
+    const codeEditor = document.getElementById('codeEditor');
+    if (codeEditor) {
+        codeEditor.value = level.starterCode;
+    }
     
     // Update navigation
-    document.getElementById('prevLevel').disabled = index === 0;
-    document.getElementById('nextLevel').disabled = index === levels.length - 1;
+    const prevBtn = document.getElementById('prevLevel');
+    const nextBtn = document.getElementById('nextLevel');
+    if (prevBtn) prevBtn.disabled = index === 0;
+    if (nextBtn) nextBtn.disabled = index === levels.length - 1;
     
     // Update level list
     renderLevelsList();
     
     // Clear status
-    document.getElementById('codeStatus').textContent = '';
-    document.getElementById('codeStatus').className = 'code-status';
-    document.getElementById('hintContent').style.display = 'none';
+    const codeStatus = document.getElementById('codeStatus');
+    if (codeStatus) {
+        codeStatus.textContent = '';
+        codeStatus.className = 'code-status';
+    }
+    const hintContent = document.getElementById('hintContent');
+    if (hintContent) {
+        hintContent.style.display = 'none';
+    }
+    
+    // Clear IDE output
+    if (window.ideEditor) {
+        window.ideEditor.clearOutput();
+    }
     
     // Initialize game canvas for this level
     initGameCanvas(level);
@@ -344,8 +382,18 @@ function initGameCanvas(level) {
 }
 
 function runCode() {
-    const code = document.getElementById('codeEditor').value;
+    // Use IDE editor if available, otherwise fall back to textarea
+    let code;
+    if (window.ideEditor) {
+        code = window.ideEditor.getCode();
+    } else {
+        const editor = document.getElementById('codeEditor') || document.getElementById('ideCodeEditor');
+        code = editor ? editor.value : '';
+    }
+    
     const canvas = document.getElementById('gameCanvas');
+    if (!canvas) return;
+    
     const ctx = canvas.getContext('2d');
     
     // Clear canvas
@@ -356,25 +404,42 @@ function runCode() {
     // Make canvas and context available
     window.gameCanvas = canvas;
     window.ctx = ctx;
+    window.canvas = canvas;
     
     try {
         eval(code);
         
         // Update game visualization based on level
         if (typeof updateGameState === 'function') {
-            updateGameState(currentLevel + 1, code);
+            setTimeout(() => {
+                updateGameState(currentLevel + 1, code);
+            }, 100);
         }
         
-        document.getElementById('codeStatus').textContent = '✓ Code executed successfully!';
-        document.getElementById('codeStatus').className = 'code-status success';
+        const statusEl = document.getElementById('codeStatus');
+        if (statusEl) {
+            statusEl.textContent = '✓ Code executed successfully!';
+            statusEl.className = 'code-status success';
+        }
     } catch (error) {
-        document.getElementById('codeStatus').textContent = '✗ Error: ' + error.message;
-        document.getElementById('codeStatus').className = 'code-status error';
+        const statusEl = document.getElementById('codeStatus');
+        if (statusEl) {
+            statusEl.textContent = '✗ Error: ' + error.message;
+            statusEl.className = 'code-status error';
+        }
     }
 }
 
 function checkSolution() {
-    const code = document.getElementById('codeEditor').value;
+    // Get code from IDE editor if available, otherwise from textarea
+    let code;
+    if (window.ideEditor) {
+        code = window.ideEditor.getCode();
+    } else {
+        const editor = document.getElementById('codeEditor');
+        code = editor ? editor.value : '';
+    }
+    
     const level = levels[currentLevel];
     
     if (level.solution(code)) {
@@ -384,23 +449,35 @@ function checkSolution() {
             localStorage.setItem('completedLevels', JSON.stringify(completedLevels));
         }
         
-        document.getElementById('codeStatus').textContent = '✓ Level Complete! Well done!';
-        document.getElementById('codeStatus').className = 'code-status success';
+        const statusEl = document.getElementById('codeStatus');
+        if (statusEl) {
+            statusEl.textContent = '✓ Level Complete! Well done!';
+            statusEl.className = 'code-status success';
+        }
         
         // Enable next level if not last
         if (currentLevel < levels.length - 1) {
-            document.getElementById('nextLevel').disabled = false;
+            const nextBtn = document.getElementById('nextLevel');
+            if (nextBtn) nextBtn.disabled = false;
         }
         
         updateProgress();
         renderLevelsList();
     } else {
-        document.getElementById('codeStatus').textContent = '✗ Not quite right. Check the instructions!';
-        document.getElementById('codeStatus').className = 'code-status error';
+        const statusEl = document.getElementById('codeStatus');
+        if (statusEl) {
+            statusEl.textContent = '✗ Not quite right. Check the instructions!';
+            statusEl.className = 'code-status error';
+        }
     }
 }
 
 function resetLevel() {
+    const level = levels[currentLevel];
+    if (window.ideEditor && level) {
+        window.ideEditor.setCode(level.starterCode);
+        window.ideEditor.clearOutput();
+    }
     loadLevel(currentLevel);
 }
 

@@ -195,6 +195,30 @@ body {
     gap: 20px;
 }
 
+/* Split Container for IDE */
+.split-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    min-height: 600px;
+}
+
+.split-left, .split-right {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+@media (max-width: 1200px) {
+    .split-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .split-left, .split-right {
+        min-height: 400px;
+    }
+}
+
 .game-view {
     background: rgba(0, 0, 0, 0.5);
     border-radius: 15px;

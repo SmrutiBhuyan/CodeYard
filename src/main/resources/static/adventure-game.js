@@ -12,6 +12,8 @@ let gameState = {
 // This will be called when user completes code in each level
 function updateGameState(level, code) {
     const canvas = document.getElementById('gameCanvas');
+    if (!canvas) return;
+    
     const ctx = canvas.getContext('2d');
     
     // Clear canvas
@@ -46,8 +48,11 @@ function updateGameState(level, code) {
             drawItems(ctx, code);
             break;
         case 7:
-            // DOM level - draw shapes
-            // Already handled by user's code
+            // DOM level - draw shapes (user's code handles this)
+            // But we can show a default if nothing drawn
+            if (!code.includes('fillRect') && !code.includes('fillStyle')) {
+                drawDefaultCanvas(ctx);
+            }
             break;
         case 8:
             // Events level - show keyboard input
@@ -61,41 +66,110 @@ function updateGameState(level, code) {
             // Async level - show loading animation
             drawAsyncAnimation(ctx);
             break;
+        default:
+            drawDefaultCanvas(ctx);
     }
 }
 
-function drawPlayerStats(ctx, code) {
+function drawDefaultCanvas(ctx) {
     ctx.fillStyle = '#ff007f';
-    ctx.font = 'bold 24px Arial';
+    ctx.font = '20px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText('Player Stats', ctx.canvas.width / 2, 50);
+    ctx.fillText('Write code to see the game!', ctx.canvas.width / 2, ctx.canvas.height / 2);
+    ctx.fillStyle = '#fff';
+    ctx.font = '14px Arial';
+    ctx.fillText('Use ctx.fillRect() and ctx.fillStyle to draw', ctx.canvas.width / 2, ctx.canvas.height / 2 + 30);
+}
+
+function drawPlayerStats(ctx, code) {
+    // Draw background
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    
+    // Draw title
+    ctx.fillStyle = '#ff007f';
+    ctx.font = 'bold 28px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('🎮 Player Stats', ctx.canvas.width / 2, 50);
+    
+    // Draw stats box
+    ctx.fillStyle = 'rgba(255, 0, 127, 0.1)';
+    ctx.fillRect(50, 80, ctx.canvas.width - 100, 250);
+    ctx.strokeStyle = '#ff007f';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(50, 80, ctx.canvas.width - 100, 250);
     
     ctx.fillStyle = '#00ffff';
     ctx.font = '18px Arial';
     ctx.textAlign = 'left';
     
-    let y = 100;
-    if (code.includes('playerName')) {
-        ctx.fillText('Name: Hero', 50, y);
-        y += 30;
+    let y = 120;
+    if (code.includes('playerName') || code.includes('name')) {
+        ctx.fillText('👤 Name: Hero', 80, y);
+        y += 40;
     }
-    if (code.includes('playerHealth')) {
-        ctx.fillText('Health: 100', 50, y);
-        y += 30;
+    if (code.includes('playerHealth') || code.includes('health')) {
+        // Draw health bar
+        ctx.fillStyle = '#ff4444';
+        ctx.fillRect(80, y - 15, 200, 20);
+        ctx.fillStyle = '#00ff88';
+        ctx.fillRect(80, y - 15, 200, 20); // Full health
+        ctx.fillStyle = '#fff';
+        ctx.fillText('❤️ Health: 100/100', 80, y);
+        y += 40;
     }
-    if (code.includes('playerScore')) {
-        ctx.fillText('Score: 0', 50, y);
+    if (code.includes('playerScore') || code.includes('score')) {
+        ctx.fillText('⭐ Score: 0', 80, y);
+        y += 40;
     }
+    
+    // Draw player character
+    ctx.fillStyle = '#00ff88';
+    ctx.fillRect(ctx.canvas.width / 2 - 30, 280, 60, 60);
+    ctx.fillStyle = '#fff';
+    ctx.font = '14px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('Your Character', ctx.canvas.width / 2, 360);
 }
 
 function drawPlayerMovement(ctx, code) {
-    ctx.fillStyle = '#00ff88';
-    ctx.fillRect(250, 150, 50, 50);
+    // Draw game world
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     
-    ctx.fillStyle = '#fff';
+    // Draw grid
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < ctx.canvas.width; x += 50) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, ctx.canvas.height);
+        ctx.stroke();
+    }
+    for (let y = 0; y < ctx.canvas.height; y += 50) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(ctx.canvas.width, y);
+        ctx.stroke();
+    }
+    
+    // Draw player (animated position)
+    const time = Date.now() / 1000;
+    const x = 200 + Math.sin(time) * 50;
+    const y = 150 + Math.cos(time) * 30;
+    
+    ctx.fillStyle = '#00ff88';
+    ctx.fillRect(x, y, 50, 50);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, y, 50, 50);
+    
+    // Draw movement indicator
+    ctx.fillStyle = '#00ffff';
     ctx.font = '16px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText('Player moved!', ctx.canvas.width / 2, 250);
+    ctx.fillText('Player moved!', ctx.canvas.width / 2, 50);
+    ctx.fillText('Use arrow keys to move', ctx.canvas.width / 2, 350);
 }
 
 function drawPlayerObject(ctx, code) {
