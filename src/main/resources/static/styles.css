@@ -154,3 +154,228 @@ body {
     color: white;
     font-weight: 700;
   }
+
+  /* Learning Platform Styles */
+  .hero-section {
+    position: relative;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 20px;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-content h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: white;
+  }
+
+  .hero-content p {
+    font-size: 1.3rem;
+    margin-bottom: 30px;
+    color: white;
+  }
+
+  .languages-section {
+    padding: 80px 20px;
+    background: rgba(0, 0, 0, 0.9);
+  }
+
+  .language-card {
+    min-height: 400px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 0, 127, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .language-card:hover {
+    border-color: #ff007f;
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(255, 0, 127, 0.3);
+  }
+
+  .language-card.coming-soon {
+    opacity: 0.6;
+  }
+
+  .language-card h3 {
+    color: #ff007f;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+
+  .game-list {
+    margin: 20px 0;
+    text-align: left;
+  }
+
+  .game-list h5 {
+    color: #ff007f;
+    margin-bottom: 10px;
+  }
+
+  .game-list ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .game-list li {
+    padding: 5px 0;
+    color: white;
+  }
+
+  .features-section {
+    padding: 80px 20px;
+    position: relative;
+  }
+
+  .feature-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    height: 100%;
+  }
+
+  .feature-card h4 {
+    color: #ff007f;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+  }
+
+  .about-section {
+    padding: 60px 20px;
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  .games-section {
+    padding: 60px 20px;
+  }
+
+  .game-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+  }
+
+  .game-card h3 {
+    color: #ff007f;
+    margin-bottom: 15px;
+  }
+
+  .game-card ul {
+    text-align: left;
+    margin: 20px 0;
+  }
+
+  .game-card li {
+    padding: 8px 0;
+    color: white;
+  }
+
+  .game-demo {
+    margin: 30px 0;
+    text-align: center;
+  }
+
+  .game-controls {
+    margin-top: 20px;
+  }
+
+  .game-controls .btn {
+    margin: 5px;
+  }
+
+  .score-display {
+    font-size: 1.5rem;
+    color: #ff007f;
+    font-weight: bold;
+    margin-top: 15px;
+  }
+
+  .learning-section {
+    padding: 40px 20px;
+    background: rgba(0, 0, 0, 0.9);
+  }
+
+  #code-editor {
+    width: 100%;
+    max-width: 800px;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    border: 2px solid #ff007f;
+    border-radius: 5px;
+    padding: 15px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    margin: 20px 0;
+  }
+
+  .output-box {
+    background: #1e1e1e;
+    color: #1ef34a;
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+    min-height: 100px;
+    border: 2px solid #ff007f;
+  }
+
+  .button-group {
+    margin: 20px 0;
+  }
+
+  .button-group .btn {
+    margin: 5px;
+  }
+
+  .intro-section {
+    padding: 60px 20px;
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  .learning-path {
+    background: rgba(255, 0, 127, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    text-align: left;
+  }
+
+  .learning-path h3 {
+    color: #ff007f;
+    margin-bottom: 15px;
+  }
+
+  .learning-path ol {
+    color: white;
+  }
+
+  .code-preview {
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 20px 0;
+  }
+
+  .code-preview pre {
+    color: #d4d4d4;
+    overflow-x: auto;
+  }
+
+  .download-section {
+    margin-top: 20px;
+  }
+
+  .download-section ol {
+    text-align: left;
+    color: white;
+  }

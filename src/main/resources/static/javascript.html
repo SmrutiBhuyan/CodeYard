@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn JavaScript - CodeYard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="game-levels.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top game-nav">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <span class="logo-text">🎮 CodeYard</span>
+            </a>
+            <a href="/" class="btn-back">← Back to Home</a>
+        </div>
+    </nav>
+
+    <div class="game-container">
+        <!-- Level Selector Sidebar -->
+        <div class="level-sidebar">
+            <h3>Adventure Game</h3>
+            <p class="subtitle">Master JavaScript</p>
+            <div class="levels-list" id="levelsList">
+                <!-- Levels will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <div class="game-main">
+            <!-- Level Header -->
+            <div class="level-header">
+                <div class="level-info">
+                    <h1 id="levelTitle">Level 1: Getting Started</h1>
+                    <p id="levelDescription">Learn the basics of JavaScript</p>
+                </div>
+                <div class="level-progress">
+                    <div class="progress-bar-large">
+                        <div class="progress-fill-large" id="overallProgress"></div>
+                    </div>
+                    <span class="progress-text">Overall Progress: <span id="progressPercent">0%</span></span>
+                </div>
+            </div>
+
+            <!-- Game Canvas Area -->
+            <div class="game-area">
+                <div class="game-view">
+                    <canvas id="gameCanvas" width="600" height="400"></canvas>
+                    <div class="game-controls">
+                        <button id="runCode" class="btn-run">▶ Run Code</button>
+                        <button id="resetLevel" class="btn-reset">↻ Reset</button>
+                        <button id="hintBtn" class="btn-hint">💡 Hint</button>
+                    </div>
+                </div>
+
+                <!-- Code Editor -->
+                <div class="code-editor-container">
+                    <div class="editor-header">
+                        <span>📝 Your Code</span>
+                        <span class="concept-badge" id="conceptBadge">Variables</span>
+                    </div>
+                    <textarea id="codeEditor" spellcheck="false">// Write your code here
+// Follow the instructions to complete this level</textarea>
+                    <div class="editor-footer">
+                        <button id="checkCode" class="btn-check">✓ Check Solution</button>
+                        <div id="codeStatus" class="code-status"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructions Panel -->
+            <div class="instructions-panel">
+                <h4>📚 Instructions</h4>
+                <div id="instructions" class="instructions-content">
+                    <!-- Instructions will be populated by JavaScript -->
+                </div>
+                <div id="hintContent" class="hint-content" style="display: none;">
+                    <h5>💡 Hint</h5>
+                    <p id="hintText"></p>
+                </div>
+            </div>
+
+            <!-- Level Navigation -->
+            <div class="level-navigation">
+                <button id="prevLevel" class="btn-nav" disabled>← Previous Level</button>
+                <button id="nextLevel" class="btn-nav" disabled>Next Level →</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="adventure-game.js"></script>
+    <script src="level-system.js"></script>
+</body>
+</html>

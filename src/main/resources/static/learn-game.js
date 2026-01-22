@@ -1,18 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const startLearningButton = document.getElementById("startLearning");
-    const gameDemoSection = document.getElementById("game-demo");
+    const startSnakeLearningButton = document.getElementById("startSnakeLearning");
+    const startDodgerLearningButton = document.getElementById("startDodgerLearning");
     const learningSection = document.getElementById("learn-js");
     const codeEditor = document.getElementById("code-editor");
     const runCodeButton = document.getElementById("run-code");
     const output = document.getElementById("output");
     const nextStepButton = document.getElementById("next-step");
+    const resetStepButton = document.getElementById("reset-step");
     const learningStep = document.getElementById("learning-step");
-    const gameCanvas = document.getElementById("gameCanvas");
-    const ctx = gameCanvas.getContext("2d");
+    const gameCanvas = document.getElementById("snakeCanvas") || document.getElementById("gameCanvas");
+    const ctx = gameCanvas ? gameCanvas.getContext("2d") : null;
 
     let currentStep = 0;
+    let currentGame = "snake"; // "snake" or "dodger"
 
-    const steps = [
+    const snakeSteps = [
         {
             instruction: "Step 1: Write a function to display 'Hello, World!' in the console.",
             code: "function sayHello() {\n  console.log('Hello, World!');\n}\nsayHello();",
@@ -31,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
         {
             instruction: "Step 4: Add collision detection to prevent the square from going outside the canvas boundaries.",
             code: `let x = 50, y = 50;\nfunction drawSquare() {\n  ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);\n  ctx.fillStyle = 'green';\n  ctx.fillRect(x, y, 50, 50);\n}\n\ndocument.addEventListener('keydown', function(event) {\n  if (event.key === 'ArrowUp' && y > 0) y -= 10;\n  if (event.key === 'ArrowDown' && y < gameCanvas.height - 50) y += 10;\n  if (event.key === 'ArrowLeft' && x > 0) x -= 10;\n  if (event.key === 'ArrowRight' && x < gameCanvas.width - 50) x += 10;\n  drawSquare();\n});\ndrawSquare();`,
-            test: (userCode) => userCode.includes("collision detection")
+            test: (userCode) => userCode.includes("gameCanvas.height") || userCode.includes("canvas.height")
         },
         {
             instruction: "Step 5: Add an obstacle to the canvas that the square must avoid.",
@@ -40,57 +42,108 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     ];
 
-    startLearningButton.addEventListener("click", () => {
-        gameDemoSection.style.display = "none";
-        learningSection.style.display = "block";
-        updateStep();
-    });
-
-    runCodeButton.addEventListener("click", () => {
-        const userCode = codeEditor.value;
-        let capturedOutput = "";
-
-        const originalConsoleLog = console.log;
-        console.log = function (...args) {
-            capturedOutput += args.join(" ") + "\n";
-            originalConsoleLog.apply(console, args);
-        };
-
-        try {
-            eval(userCode);
-            if (steps[currentStep].test(userCode)) {
-                output.innerHTML = `<p>Great job! You completed this step.</p>
-                                    <p><strong>Output:</strong></p>
-                                    <pre>${capturedOutput.trim()}</pre>`;
-                nextStepButton.style.display = "inline-block";
-            } else {
-                output.innerHTML = `<p>Check your code and try again.</p>
-                                    <p><strong>Output:</strong></p>
-                                    <pre>${capturedOutput.trim()}</pre>`;
-            }
-        } catch (error) {
-            output.innerHTML = `<p>Error: ${error.message}</p>`;
-        } finally {
-            console.log = originalConsoleLog;
+    const dodgerSteps = [
+        {
+            instruction: "Step 1: Create a player rectangle at the bottom of the canvas.",
+            code: `const canvas = document.getElementById('dodgerCanvas');\nconst ctx = canvas.getContext('2d');\nlet playerX = canvas.width / 2 - 20;\n\nfunction drawPlayer() {\n  ctx.fillStyle = '#0095DD';\n  ctx.fillRect(playerX, canvas.height - 20, 40, 10);\n}\n\ndrawPlayer();`,
+            test: (userCode) => userCode.includes("fillRect") && userCode.includes("playerX")
+        },
+        {
+            instruction: "Step 2: Make the player move left and right with arrow keys.",
+            code: `const canvas = document.getElementById('dodgerCanvas');\nconst ctx = canvas.getContext('2d');\nlet playerX = canvas.width / 2 - 20;\n\nfunction drawPlayer() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = '#0095DD';\n  ctx.fillRect(playerX, canvas.height - 20, 40, 10);\n}\n\ndocument.addEventListener('keydown', function(event) {\n  if (event.key === 'ArrowLeft' && playerX > 0) playerX -= 10;\n  if (event.key === 'ArrowRight' && playerX < canvas.width - 40) playerX += 10;\n  drawPlayer();\n});\ndrawPlayer();`,
+            test: (userCode) => userCode.includes("ArrowLeft") && userCode.includes("ArrowRight")
         }
-    });
+    ];
 
-    nextStepButton.addEventListener("click", () => {
-        currentStep++;
-        if (currentStep < steps.length) {
+    function getCurrentSteps() {
+        return currentGame === "snake" ? snakeSteps : dodgerSteps;
+    }
+
+    if (startSnakeLearningButton) {
+        startSnakeLearningButton.addEventListener("click", () => {
+            currentGame = "snake";
+            currentStep = 0;
+            if (learningSection) learningSection.style.display = "block";
+            learningSection.scrollIntoView({ behavior: 'smooth' });
             updateStep();
-        } else {
-            learningStep.textContent = "Congratulations! You've completed the game-building tutorial.";
-            codeEditor.style.display = "none";
-            runCodeButton.style.display = "none";
-            nextStepButton.style.display = "none";
-        }
-    });
+        });
+    }
+
+    if (startDodgerLearningButton) {
+        startDodgerLearningButton.addEventListener("click", () => {
+            currentGame = "dodger";
+            currentStep = 0;
+            if (learningSection) learningSection.style.display = "block";
+            learningSection.scrollIntoView({ behavior: 'smooth' });
+            updateStep();
+        });
+    }
+
+    if (runCodeButton) {
+        runCodeButton.addEventListener("click", () => {
+            const userCode = codeEditor.value;
+            let capturedOutput = "";
+
+            const originalConsoleLog = console.log;
+            console.log = function (...args) {
+                capturedOutput += args.join(" ") + "\n";
+                originalConsoleLog.apply(console, args);
+            };
+
+            try {
+                // Make canvas and ctx available if they exist
+                if (gameCanvas && ctx) {
+                    window.gameCanvas = gameCanvas;
+                    window.ctx = ctx;
+                }
+                
+                eval(userCode);
+                const steps = getCurrentSteps();
+                if (steps[currentStep].test(userCode)) {
+                    output.innerHTML = `<p style="color: #1ef34a;">✓ Great job! You completed this step.</p>
+                                        <p><strong>Output:</strong></p>
+                                        <pre>${capturedOutput.trim() || 'Code executed successfully!'}</pre>`;
+                    if (nextStepButton) nextStepButton.style.display = "inline-block";
+                } else {
+                    output.innerHTML = `<p style="color: #ff6b6b;">Check your code and try again. Make sure you include the required elements.</p>
+                                        <p><strong>Output:</strong></p>
+                                        <pre>${capturedOutput.trim() || 'Code executed, but check the requirements.'}</pre>`;
+                }
+            } catch (error) {
+                output.innerHTML = `<p style="color: #ff6b6b;">Error: ${error.message}</p>`;
+            } finally {
+                console.log = originalConsoleLog;
+            }
+        });
+    }
+
+    if (nextStepButton) {
+        nextStepButton.addEventListener("click", () => {
+            const steps = getCurrentSteps();
+            currentStep++;
+            if (currentStep < steps.length) {
+                updateStep();
+            } else {
+                learningStep.textContent = "Congratulations! You've completed the game-building tutorial.";
+                if (codeEditor) codeEditor.style.display = "none";
+                if (runCodeButton) runCodeButton.style.display = "none";
+                nextStepButton.style.display = "none";
+                if (resetStepButton) resetStepButton.style.display = "none";
+            }
+        });
+    }
+
+    if (resetStepButton) {
+        resetStepButton.addEventListener("click", () => {
+            updateStep();
+        });
+    }
 
     function updateStep() {
-        learningStep.textContent = steps[currentStep].instruction;
-        codeEditor.value = steps[currentStep].code;
-        output.textContent = "";
-        nextStepButton.style.display = "none";
+        const steps = getCurrentSteps();
+        if (learningStep) learningStep.textContent = steps[currentStep].instruction;
+        if (codeEditor) codeEditor.value = steps[currentStep].code;
+        if (output) output.textContent = "";
+        if (nextStepButton) nextStepButton.style.display = "none";
     }
 });

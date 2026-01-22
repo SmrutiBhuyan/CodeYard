@@ -1,0 +1,435 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0a0a0a;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+.game-nav {
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 0, 127, 0.3);
+    padding: 15px 0;
+}
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    background: linear-gradient(45deg, #ff007f, #00ffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.btn-back {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 20px;
+    border: 1px solid rgba(255, 0, 127, 0.5);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+    background: rgba(255, 0, 127, 0.2);
+    border-color: #ff007f;
+    color: #fff;
+}
+
+.game-container {
+    display: flex;
+    min-height: calc(100vh - 70px);
+    margin-top: 70px;
+}
+
+/* Level Sidebar */
+.level-sidebar {
+    width: 280px;
+    background: rgba(0, 0, 0, 0.8);
+    border-right: 2px solid rgba(255, 0, 127, 0.3);
+    padding: 30px 20px;
+    position: fixed;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+}
+
+.level-sidebar h3 {
+    color: #ff007f;
+    margin-bottom: 5px;
+    font-size: 1.5rem;
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 30px;
+    font-size: 0.9rem;
+}
+
+.levels-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.level-item {
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 0, 127, 0.2);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.level-item:hover {
+    background: rgba(255, 0, 127, 0.1);
+    border-color: #ff007f;
+    transform: translateX(5px);
+}
+
+.level-item.active {
+    background: rgba(255, 0, 127, 0.2);
+    border-color: #ff007f;
+    box-shadow: 0 0 20px rgba(255, 0, 127, 0.3);
+}
+
+.level-item.completed {
+    border-color: #00ffff;
+}
+
+.level-item.completed::after {
+    content: '✓';
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00ffff;
+    font-size: 1.2rem;
+}
+
+.level-number {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 5px;
+}
+
+.level-name {
+    color: #fff;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.level-concept {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+/* Main Game Area */
+.game-main {
+    flex: 1;
+    margin-left: 280px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.level-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 0, 127, 0.3);
+}
+
+.level-info h1 {
+    color: #ff007f;
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.level-info p {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.level-progress {
+    text-align: right;
+    min-width: 250px;
+}
+
+.progress-bar-large {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-fill-large {
+    height: 100%;
+    background: linear-gradient(90deg, #ff007f, #00ffff);
+    border-radius: 10px;
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+.progress-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+/* Game Area */
+.game-area {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.game-view {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    padding: 20px;
+    border: 2px solid rgba(255, 0, 127, 0.3);
+}
+
+#gameCanvas {
+    width: 100%;
+    border: 2px solid #ff007f;
+    border-radius: 10px;
+    background: #000;
+    display: block;
+    margin: 0 auto 20px;
+}
+
+.game-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.btn-run, .btn-reset, .btn-hint {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-run {
+    background: linear-gradient(45deg, #ff007f, #ff00ff);
+    color: white;
+}
+
+.btn-run:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(255, 0, 127, 0.4);
+}
+
+.btn-reset {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-reset:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-hint {
+    background: rgba(0, 255, 255, 0.2);
+    color: #00ffff;
+    border: 1px solid rgba(0, 255, 255, 0.5);
+}
+
+.btn-hint:hover {
+    background: rgba(0, 255, 255, 0.3);
+}
+
+/* Code Editor */
+.code-editor-container {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    border: 2px solid rgba(255, 0, 127, 0.3);
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-header {
+    padding: 15px 20px;
+    background: rgba(255, 0, 127, 0.1);
+    border-bottom: 1px solid rgba(255, 0, 127, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.concept-badge {
+    background: linear-gradient(45deg, #ff007f, #00ffff);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+#codeEditor {
+    flex: 1;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    border: none;
+    padding: 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    line-height: 1.6;
+}
+
+.editor-footer {
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(255, 0, 127, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-check {
+    padding: 10px 25px;
+    background: linear-gradient(45deg, #00ffff, #00ff88);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-check:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(0, 255, 255, 0.4);
+}
+
+.code-status {
+    font-weight: bold;
+}
+
+.code-status.success {
+    color: #00ff88;
+}
+
+.code-status.error {
+    color: #ff4444;
+}
+
+/* Instructions Panel */
+.instructions-panel {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 25px;
+    border: 1px solid rgba(255, 0, 127, 0.3);
+}
+
+.instructions-panel h4 {
+    color: #ff007f;
+    margin-bottom: 15px;
+}
+
+.instructions-content {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.8;
+}
+
+.instructions-content ol, .instructions-content ul {
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.instructions-content li {
+    margin: 8px 0;
+}
+
+.hint-content {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(0, 255, 255, 0.1);
+    border-left: 3px solid #00ffff;
+    border-radius: 5px;
+}
+
+.hint-content h5 {
+    color: #00ffff;
+    margin-bottom: 10px;
+}
+
+/* Level Navigation */
+.level-navigation {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0;
+}
+
+.btn-nav {
+    padding: 12px 30px;
+    background: rgba(255, 0, 127, 0.2);
+    color: white;
+    border: 2px solid #ff007f;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-nav:hover:not(:disabled) {
+    background: rgba(255, 0, 127, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(255, 0, 127, 0.4);
+}
+
+.btn-nav:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .game-area {
+        grid-template-columns: 1fr;
+    }
+    
+    .level-sidebar {
+        width: 250px;
+    }
+    
+    .game-main {
+        margin-left: 250px;
+    }
+}
+
+@media (max-width: 768px) {
+    .level-sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+    
+    .game-main {
+        margin-left: 0;
+    }
+    
+    .level-header {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
